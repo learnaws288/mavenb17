@@ -8,13 +8,13 @@
 	<version>1.0</version>
 	
 	<name>Maven Web Application</name>
-	<url>http://mithuntechnologies.com</url>
+	<url>http://saikk.com</url>
 	
 	<description>Maven Web Project</description>
 
 	<organization>
-		<name>Mithun Technologies</name>
-		<url>http://mithuntechnologies.com/</url>
+		<name>saikiran</name>
+		<url>saikiran</url>
 	</organization>
 
 	<properties>
@@ -101,12 +101,12 @@
 	<!-- <distributionManagement>
 	    <repository>
 	      <id>nexus</id>
-	      <name>Mithun Technologies Releases Nexus Repository</name>
+	      <name>Sai</name>
 	      <url>http://13.235.8.113:8081/repository/flipkart-release/</url>
 	    </repository>
 	    <snapshotRepository>
 	      <id>nexus</id>
-	      <name>Mithun Technologies Snapshot Nexus Repository </name>
+	      <name>Sai </name>
 	      <url>http://13.235.8.113:8081/repository/flipkart-snapshot/</url>
 	    </snapshotRepository>
 	</distributionManagement> -->
