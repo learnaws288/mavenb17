@@ -1,0 +1,40 @@
+pipeline {
+    agent { label 'java' }
+   environment{
+        BUILD_SERVER_IP='ec2-user@172.31.22.208'
+    }
+    
+    stages {
+        stage('SCM Clone') {
+            steps {
+         //  git branch: 'main', credentialsId: 'dfe5f943-0d46-4182-9f7b-f360c2f23867', url: 'https://gitlab.com/learnaws288/flipkart-updated.git'
+           git 'https://github.com/learnaws288/mavenb17.git'
+            }
+        }
+        stage('Build the project') {
+            steps {
+         //  git branch: 'main', credentialsId: 'dfe5f943-0d46-4182-9f7b-f360c2f23867', url: 'https://gitlab.com/learnaws288/flipkart-updated.git'
+           sh 'mvn clean package'
+            }
+        }
+        stage('package') {
+            // agent {label 'linux_slave'}
+            // when{
+            //     expression{
+            //         BRANCH_NAME == 'dev' || BRANCH_NAME == 'develop'
+            //     }
+            // }
+            steps {
+                script{
+                sshagent(['build-server-key']) {
+                    echo "Packaging the code on new slave"
+                    sh "scp -o StrictHostKeyChecking=no server-config.sh ${BUILD_SERVER_IP}:/home/ec2-user"
+                    sh "ssh -o StrictHostKeyChecking=no ${BUILD_SERVER_IP} 'bash ~/server-config.sh'"
+                }     
+            }           
+        }
+        }
+    }
+}
+        
+     
