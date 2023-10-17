@@ -1,7 +1,7 @@
 pipeline {
     agent { label 'java' }
    environment{
-        BUILD_SERVER_IP='ec2-user@172.31.22.208'
+        BUILD_SERVER_IP='ubuntu@13.233.172.140'
     }
     
     stages {
@@ -26,9 +26,9 @@ pipeline {
             // }
             steps {
                 script{
-                sshagent(['build-server-key']) {
+                sshagent(['QA_ENV']) {
                     echo "Packaging the code on new slave"
-                    sh "scp -o StrictHostKeyChecking=no server-config.sh ${BUILD_SERVER_IP}:/home/ec2-user"
+                    sh "scp -o StrictHostKeyChecking=no server-config.sh ${BUILD_SERVER_IP}:/home/ubuntu"
                     sh "ssh -o StrictHostKeyChecking=no ${BUILD_SERVER_IP} 'bash ~/server-config.sh'"
                 }     
             }           
