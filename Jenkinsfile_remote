@@ -3,12 +3,7 @@ pipeline {
    environment{
         BUILD_SERVER_IP='ubuntu@65.0.180.13'
     }
-    stages {
-        stage('SCM') {
-            steps {
-             git "https://github.com/learnaws288/mavenb17.git"
-        }
-    }
+ 
    stage('package') {
             steps {
                 script{
