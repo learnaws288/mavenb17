@@ -1,7 +1,7 @@
 pipeline {
    agent any
    environment{
-        BUILD_SERVER_IP='ubuntu@65.0.180.13'
+        BUILD_SERVER_IP='ubuntu@65.1.147.236'
     }
  
    stage('package') {
