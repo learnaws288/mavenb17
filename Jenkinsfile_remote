@@ -3,7 +3,7 @@ pipeline {
    environment{
         BUILD_SERVER_IP='ubuntu@65.0.180.13'
     }
- 
+    stages {
    stage('package') {
             steps {
                 script{
@@ -17,4 +17,4 @@ pipeline {
         }
         }
 }
-
+}
