@@ -36,7 +36,7 @@ pipeline {
        stage('Deploy webAPP in Prod Env') {
 steps {
 sshagent(['QA']) {
-    sh "ssh -o StrictHostKeyChecking=no ubuntu@ 65.2.131.81  sudo  kubectl delete deployment  myjavawebapp" 
+    sh "ssh -o StrictHostKeyChecking=no ubuntu@13.234.113.231   sudo  kubectl delete deployment  myjavawebapp" 
 sh "ssh -o StrictHostKeyChecking=no ubuntu@13.234.113.231   sudo kubectl create deployment myjavawebapp --image=learndevops16/app:${BUILD_ID}"
 sh "ssh ubuntu@13.234.113.231   sudo wget https://raw.githubusercontent.com/learnasws16161616/maven/master/webappsvc.yml"
 sh "ssh ubuntu@13.234.113.231   sudo kubectl apply -f webappsvc.yml"
