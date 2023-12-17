@@ -1,20 +1,48 @@
 pipeline {
-   agent any
-   environment{
-        BUILD_SERVER_IP='ubuntu@3.110.148.148'
-    }
+ 
+    agent any
+   
     stages {
-   stage('package') {
+        stage('SCM') {
             steps {
-                script{
-                sshagent(['QA']) {
-                    echo "Packaging the code on new slave"
-                   // sh "scp -o StrictHostKeyChecking=no server-config.sh ${BUILD_SERVER_IP}:/home/ubuntu"
-                    sh "ssh -o StrictHostKeyChecking=no ${BUILD_SERVER_IP} sudo apt update -y"
-                    sh "ssh -o StrictHostKeyChecking=no ${BUILD_SERVER_IP} sudo apt install maven -y"
-                }     
-            }           
-        }
-        }
+                git 'https://github.com/learnaws288/mavenb17.git'
+            }         
 }
+       
+        stage('Build by Maven Package') {
+            steps {
+                sh 'mvn clean package'
+            }
+        }
+        stage('Build Docker OWN image') {
+            steps {
+                sh "sudo docker build -t learndevops16/appserver:${BUILD_ID} ."
+
+            }
+           
+        }
+          stage('docker push ') {
+    steps {
+    withCredentials([string(credentialsId: 'DOCKER_HUB_PWD', variable: 'DOCKER_HUB_PASS_CODE')])  {
+    // some block
+        sh "sudo docker login -u learndevops16 -p $DOCKER_HUB_PASS_CODE"
+    }
+    sh "sudo docker push learndevops16/appserver:${BUILD_ID}"
+}
+}
+  stage('Deploy webAPP in Prod Env') {
+steps {
+sshagent(['QA']) {
+     sh "ssh -o StrictHostKeyChecking=no ubuntu@13.126.125.30    sudo  kubectl delete deployment  myjavawebapp"
+
+sh "ssh -o StrictHostKeyChecking=no ubuntu@13.126.125.30   sudo kubectl create deployment myjavawebapp --image=learndevops16/appserver:${BUILD_ID}"
+sh "ssh ubuntu@13.126.125.30   sudo wget https://raw.githubusercontent.com/learnasws16161616/maven/master/webappsvc.yml"
+sh "ssh ubuntu@13.126.125.30   sudo kubectl apply -f webappsvc.yml"
+}
+}
+}
+
+
+
+    }
 }
