@@ -40,7 +40,7 @@
 
 	<div class="row">
 		<div class="col-md-8">
-			<h2>Project by Emexo11</h2>
+			<h2>Project by Emexo</h2>
 			<h3>Contact me for DevOps training</h3>
 		</div>	
 	</div>

@@ -1,0 +1,33 @@
+pipeline {
+    agent any
+    tools{
+maven 'maven3.9.1'
+
+}
+    stages {
+        stage('Build by Maven Package') {
+            steps {
+                sh 'mvn --version'
+            }
+        }
+    }
+    post{
+
+ success{
+ emailext to: 'kirankumaraws9738@gmail.com',
+          subject: "Pipeline Build is over .. Build # is ..${env.BUILD_NUMBER} and Build status is.. ${currentBuild.result}.",
+          body: "Pipeline Build is over .. Build # is ..${env.BUILD_NUMBER} and Build status is.. ${currentBuild.result}.",
+          replyTo: 'learnaws288@gmail.com'
+ }
+ 
+ failure{
+ emailext to: 'learnaws288@gmail.com',
+          subject: "Pipeline Build is over .. Build # is ..${env.BUILD_NUMBER} and Build status is.. ${currentBuild.result}.",
+          body: "Pipeline Build is over .. Build # is ..${env.BUILD_NUMBER} and Build status is.. ${currentBuild.result}.",
+          replyTo: 'learnaws288@gmail.com'
+ }
+ 
+}
+
+
+}
