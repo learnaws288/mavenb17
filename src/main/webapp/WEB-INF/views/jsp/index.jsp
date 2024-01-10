@@ -41,7 +41,7 @@
 	<div class="row">
 		<div class="col-md-8">
 			<h2>Project by Sai</h2>
-			<h3>Contact me for AWS training</h3>
+			<h3>Contact me for DevOps training</h3>
 		</div>	
 	</div>
 
