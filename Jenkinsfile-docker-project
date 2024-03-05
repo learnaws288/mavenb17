@@ -1,0 +1,26 @@
+pipeline {
+ 
+    agent any
+   
+    stages {
+        stage('SCM') {
+            steps {
+                git 'https://github.com/learnaws288/mavenb17.git'
+            }         
+}
+       
+        stage('Build by Maven Package') {
+            steps {
+                sh 'mvn clean package'
+            }
+        }
+        stage('Build Docker OWN image') {
+            steps {
+                sh "sudo docker build -t devopsazure50/webapp:${BUILD_ID} ."
+
+            }
+           
+        }
+}
+}
+        
