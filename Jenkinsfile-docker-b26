@@ -1,0 +1,43 @@
+pipeline {
+ 
+    agent any
+   
+    stages {
+        stage('SCM') {
+            steps {
+                git 'https://github.com/learnaws288/mavenb17.git'
+            }         
+}
+       
+        stage('Build by Maven Package') {
+            steps {
+                sh 'mvn clean package'
+            }
+        }
+        stage('Build Docker OWN image') {
+            steps {
+                sh "sudo docker build -t devopsazure50/webapp:${BUILD_ID} ."
+
+            }
+           
+        }
+          stage('docker push ') {
+     steps {
+     withCredentials([string(credentialsId: 'DOCKER_HUB_PWD', variable: 'DOCKER_HUB_PASS_CODE')])  {
+    // some block
+    sh "sudo docker login -u devopsazure50 -p $DOCKER_HUB_PASS_CODE"
+}
+ sh "sudo docker push devopsazure50/webapp:${BUILD_ID}"
+
+}
+}       
+
+stage('Deploy to docker Env') {
+steps {
+     sh "sudo docker rm -f web" 
+  sh "sudo docker run -itd --name web -p 9000:8080 devopsazure50/webapp:${BUILD_ID}" 
+}
+}
+}
+}
+        
