@@ -32,12 +32,32 @@ pipeline {
 }
 }       
 
-stage('Deploy to docker Env') {
+stage('Deploy to Dev Env') {
 steps {
-     sh "sudo docker rm -f web" 
-  sh "sudo docker run -itd --name web -p 9000:8080 devopsazure50/webapp:${BUILD_ID}" 
+sshagent(['DEV_ENV']) {
+     sh "ssh -o StrictHostKeyChecking=no ubuntu@3.108.63.167  sudo docker rm -f app1" 
+    sh "ssh -o StrictHostKeyChecking=no ubuntu@3.108.63.167  sudo docker run -itd --name app1 -p 8080:8080 devopsazure50/webapp:${BUILD_ID}" 
 }
 }
+}
+stage('approved') {
+steps {
+script {
+Boolean userInput = input(id: 'Proceed1', message: 'Promote build?', parameters: [[$class: 'BooleanParameterDefinition', defaultValue: true, description: '', name: 'Please confirm you agree with this']])
+echo 'userInput: ' + userInput
+
+if(userInput == true) {
+// do action
+} else {
+// not do action
+echo "Action was aborted."
+}
+
+}
+}
+}
+
+
 }
 }
         
