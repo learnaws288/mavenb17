@@ -21,6 +21,46 @@ pipeline {
             }
            
         }
+          stage('docker push ') {
+     steps {
+     withCredentials([string(credentialsId: 'DOCKER_HUB_PWD', variable: 'DOCKER_HUB_PASS_CODE')])  {
+    // some block
+    sh "sudo docker login -u devopsazure50 -p $DOCKER_HUB_PASS_CODE"
+}
+ sh "sudo docker push devopsazure50/webapp:${BUILD_ID}"
+
+}
+}       
+
+stage('Deploy to Dev Env') {
+steps {
+sshagent(['DEV_ENV']) {
+     sh "ssh -o StrictHostKeyChecking=no ubuntu@13.201.73.220  sudo docker rm -f app1" 
+    sh "ssh -o StrictHostKeyChecking=no ubuntu@13.201.73.220  sudo docker run -itd --name app1 -p 8080:8080 devopsazure50/webapp:${BUILD_ID}" 
 }
 }
+}
+stage('Deploy to QA Env') {
+steps {
+sshagent(['QA']) {
+script {
+Boolean userInput = input(id: 'Proceed1', message: 'Promote build?', parameters: [[$class: 'BooleanParameterDefinition', defaultValue: true, description: '', name: 'Please confirm you agree with this']])
+echo 'userInput: ' + userInput
+
+if(userInput == true) {
+// do action
+ sh "ssh -o StrictHostKeyChecking=no ubuntu@13.201.22.54   sudo docker rm -f app1" 
+ sh "ssh -o StrictHostKeyChecking=no ubuntu@13.201.22.54  sudo docker run -itd --name app1 -p 8080:8080 devopsazure50/webapp:${BUILD_ID}" 
+} else 
+{
+// not do action
+echo "Action was aborted."
+}
+}
+}
+}
+}
+}
+}
+
         
